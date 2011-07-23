@@ -1,0 +1,21 @@
+*Allgemein*
+- Bessere Gameboy-Icons
+- Alle Icons gleich groß
+- Entwicklerdokumentation
+- Anwenderhandbuch
+- Quellcode internationalisieren
+- Fenstergröße nachträglich nicht mehr ändern
+- Veröffentlichung (Website...)
+- Quellcodestruktur schön machen :)
+- Auf Cmake & Kdevelop umstellen...
+
+*Gnuboy*
+- Tastenbelegung
+- Speicherort
+
+*VBA*
+- Sound (Ein/Aus/Lautstärke)
+- Tastenbelegung
+- Speicherort
+- Diverse Statusmeldungen ein/aus
+- Evtl. Grafikfilter?
