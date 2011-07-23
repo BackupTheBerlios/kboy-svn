@@ -1,0 +1,10 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+<qresource>
+     <file>img/gnuboy.png</file>
+     <file>img/gb.png</file>
+     <file>img/gbc.png</file>
+     <file>img/gba.png</file>
+     <file>img/x.png</file>
+</qresource>
+</RCC>
