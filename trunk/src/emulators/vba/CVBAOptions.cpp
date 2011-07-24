@@ -1,75 +1,59 @@
-#include "CVBAOptions.h"
+#include "emulators/vba/CVBAOptions.hpp"
 
 
 CVBAOptions::CVBAOptions() {
-	// Standardwerte
-	setEmulator(CAbstraktOptions::VBA);
+	// define some standard values
+	setEmulator(CAbstractEmulatorOptions::VBA);
 	setEmuCommand("visualboyadvance");
 	setScale(1);
 	setFullscreen(true);
 }
 
-void CVBAOptions::setScale(const unsigned short Val) {
-	if(Val>4) prScale=4;
-	else prScale=Val;
+void CVBAOptions::setScale(const unsigned short scaleVal) {
+	if(scaleVal>4) m_Scale=4;
+	else m_Scale=scaleVal;
 }
 
 unsigned short CVBAOptions::getScale() const {
-	return prScale;
+	return m_Scale;
+}
+
+void CVBAOptions::setFullscreen(bool fullscreen) {
+   m_Fullscreen=fullscreen;
+}
+
+bool CVBAOptions::getFullscreen() const {
+   return m_Fullscreen;
+}
+
+const QString& CVBAOptions::getEmuCommand() const {
+   return m_EmuCommand;
+}
+
+void CVBAOptions::setEmuCommand(const QString& command) {
+   m_EmuCommand=command;
 }
 
 
 
-int CVBAOptions::fromXml(QXmlStreamReader& XmlReader) {
-	/* Emulator-spezifische Optionen einlesen */
-	while(!XmlReader.atEnd()) {
-		XmlReader.readNext();
-		
-		if(XmlReader.isStartElement()) {
-			if(XmlReader.qualifiedName().toString()=="commandline") {
-				// Befehlszeile
-				this->setEmuCommand(XmlReader.readElementText());
-			}
-			else if(XmlReader.qualifiedName().toString()=="fullscreen") {
-				//Vollbildmodus
-				if(XmlReader.readElementText()=="true") this->setFullscreen(true);
-				else this->setFullscreen(false);
-			}
-			else if(XmlReader.qualifiedName().toString()=="scale") {
-				//Fenstervergrößerung
-				this->setScale(XmlReader.readElementText().toShort());
-			}
-		}
-		else if(XmlReader.isEndElement() && XmlReader.qualifiedName().toString()=="options") {
-			/* Abbruch, wenn Optionen zu Ende sind */
-			break; // Ende der Optionenliste erreicht
-		}
-	}
-	return 0;
+bool CVBAOptions::isRomSupported(const QString& Filename) const {
+   // TODO: Check if VBA supports this ROM file (file extension check etc.)
+   return true;
 }
 
 
-void CVBAOptions::toXml(QXmlStreamWriter& XmlWriter) {
-	// Kommandozeile
-	XmlWriter.writeTextElement("commandline", getEmuCommand());
-	// Vollbildmodus
-	if(true==this->getFullscreen()) {
-		XmlWriter.writeTextElement("fullscreen", "true");
-	}
-	else {
-		XmlWriter.writeTextElement("fullscreen", "false");
-	}
-	// Fenster-Scaling
-	XmlWriter.writeTextElement("scale", QString::number(this->getScale()));
+std::auto_ptr<CAbstractEmulatorOptions> CVBAOptions::clone() const {
+   // Make a deep copy of THIS
+   return std::auto_ptr<CAbstractEmulatorOptions>(new CVBAOptions(*this));
 }
 
 
-
-QStringList CVBAOptions::getCommandArgs() {
+QStringList CVBAOptions::getCommandArgs() const {
 	QStringList Args;
-	
+
 	if(getFullscreen()==true) Args.append("-F");
 	if(getScale()>1) Args.append("-"+QString::number(getScale()));
-	
+
 	return Args;
 }
+

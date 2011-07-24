@@ -1,3 +1,5 @@
+#if 0
+
 #ifndef CGNUBOYOPTIONSWIDGET
 #define CGNUBOYOPTIONSWIDGET
 
@@ -28,5 +30,7 @@ class CGnuboyOptionsWidget : public CAbstraktOptionsWidget {
 	void ScaleChanged(int Scale);
 	void CmdlineChanged(const QString& text);
 };
+
+#endif
 
 #endif

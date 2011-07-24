@@ -1,5 +1,5 @@
-#ifndef H_MAINFORM
-#define H_MAINFORM
+#ifndef H_CMAINFORM
+#define H_CMAINFORM
 
 #include <QApplication>
 #include <QWidget>
@@ -18,15 +18,11 @@
 #include <QTranslator>
 #include <QComboBox>
 
-#include "CGBSpiel.h"
-#include "CGBSpielListModel.h"
-#include "CGnuboyOptionsWidget.h"
-#include "CVBAOptionsWidget.h"
-#include "CGnuboyOptions.h"
-#include "CVBAOptions.h"
+#include "CGame.hpp"
+#include "CGameListModel.hpp"
 
 
-class MainForm:public QWidget {
+class CMainForm : public QWidget {
  Q_OBJECT
 
  private:
@@ -34,28 +30,28 @@ class MainForm:public QWidget {
 	// Layouts
 	QHBoxLayout *MainHBox, *SpieleButtonHBox;
 	QVBoxLayout *RechtsVBox, *SpieleFrameBox, *OptionenVBox;
-	
+
 	// Container
 	QGroupBox *FrameListe, *FrameOptionen;
 	QWidget *SpieleFrameButtonBox, *BoxRechts;
-	CGnuboyOptionsWidget *GnuboyOptionenBox;
-	CVBAOptionsWidget *VBAOptionenBox;
-	
+	//CGnuboyOptionsWidget *GnuboyOptionenBox;
+	//CVBAOptionsWidget *VBAOptionenBox;
+
 	// Steuerelemente
 	QPushButton *ButtonAdd, *ButtonDel, *ButtonStart, *ButtonEnde;
 	QTableView *ListViewSpiele;
 	QComboBox *ComboEmulator;
-	
+
 	/* Sonstige Member */
 	QProcess *Gnuboy;
-	CGBSpielListModel *Spieleliste;
-	
+	CGameListModel *Spieleliste;
+
 	// Methoden
 	void buildGUI();
 	void initWidgets();
 	void configureWidgets();
 	void connectObjects();
-	
+
  private slots:
 	void btnStartClicked();
 	void btnAddClicked();
@@ -63,10 +59,10 @@ class MainForm:public QWidget {
 	void gameStatusChanged(QProcess::ProcessState newState);
 	void selectedGameChanged(const QItemSelection & selected, const QItemSelection & deselected);
 	void emulatorChanged(int index);
-	
+
  public:
-	MainForm(QWidget *parent=0);
-	~MainForm();
+	CMainForm(QWidget *parent=0);
+	virtual ~CMainForm();
 };
 
 #endif

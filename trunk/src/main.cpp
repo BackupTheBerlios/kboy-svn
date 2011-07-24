@@ -1,11 +1,17 @@
 #include <QtGui/QApplication>
-#include "kboy.h"
+
+#include "gui/CMainForm.hpp"
 
 
-int main(int argc, char** argv)
-{
-    QApplication app(argc, argv);
-    kboy foo;
-    foo.show();
-    return app.exec();
+int main(int argc, char **argv) {
+	QApplication app(argc, argv);
+
+	QTranslator qtTranslator;
+	qtTranslator.load("kboy_" + QLocale::system().name(), QDir::homePath()+"/.kboy/lang");
+	app.installTranslator(&qtTranslator);
+
+	CMainForm dlg;
+	dlg.show();
+
+	return app.exec();
 }

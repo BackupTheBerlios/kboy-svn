@@ -1,6 +1,9 @@
-#include "MainForm.h"
+#include "dao/xml/CXmlGameListLoader.hpp"
+#include "dao/xml/CXmlGameListWriter.hpp"
 
-void MainForm::initWidgets() {
+#include "gui/CMainForm.hpp"
+
+void CMainForm::initWidgets() {
 	// Alle Widgets initialisieren
 	// Layouts
 	MainHBox=new QHBoxLayout();
@@ -14,8 +17,8 @@ void MainForm::initWidgets() {
 	FrameOptionen=new QGroupBox(trUtf8("Emulator-Optionen"));
  	SpieleFrameButtonBox=new QWidget();
 	BoxRechts=new QWidget();
-	GnuboyOptionenBox=new CGnuboyOptionsWidget();
-	VBAOptionenBox=new CVBAOptionsWidget();
+	//GnuboyOptionenBox=new CGnuboyOptionsWidget();
+	//VBAOptionenBox=new CVBAOptionsWidget();
 
 
 	// Steuerelemente
@@ -28,9 +31,9 @@ void MainForm::initWidgets() {
 }
 
 
-void MainForm::buildGUI() {
+void CMainForm::buildGUI() {
 	// Oberfläche zusammenbauen
-	
+
 	/* Linker Frame (Spieleliste) */
 	// Buttonleiste
 	SpieleButtonHBox->addWidget(ButtonAdd);
@@ -40,22 +43,22 @@ void MainForm::buildGUI() {
 	SpieleFrameBox->addWidget(ListViewSpiele);
 	SpieleFrameBox->addWidget(SpieleFrameButtonBox);
 	FrameListe->setLayout(SpieleFrameBox);
-	
+
 	/* Rechter Frame (Optionen & Buttons) */
 	// Optionen-Feld
 	OptionenVBox->addWidget(ComboEmulator);
 	OptionenVBox->addSpacing(15);
-	OptionenVBox->addWidget(GnuboyOptionenBox);
-	OptionenVBox->addWidget(VBAOptionenBox);
+	//OptionenVBox->addWidget(GnuboyOptionenBox);
+	//OptionenVBox->addWidget(VBAOptionenBox);
 	/* Ende Emulator-Optionen */
-	
+
 	FrameOptionen->setLayout(OptionenVBox);
 	RechtsVBox->addWidget(FrameOptionen);
 	RechtsVBox->addWidget(ButtonStart);
 	RechtsVBox->addSpacing(10);
 	RechtsVBox->addWidget(ButtonEnde);
 	BoxRechts->setLayout(RechtsVBox);
-	
+
 	/* Haupt-Layout */
 	MainHBox->addWidget(FrameListe);
 	MainHBox->addWidget(BoxRechts);
@@ -63,7 +66,7 @@ void MainForm::buildGUI() {
 }
 
 
-void MainForm::configureWidgets() {
+void CMainForm::configureWidgets() {
 	// Widgets konfigurieren
 	ListViewSpiele->setModel(Spieleliste);
 	ListViewSpiele->verticalHeader()->hide();
@@ -73,19 +76,19 @@ void MainForm::configureWidgets() {
 	ListViewSpiele->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ListViewSpiele->setSelectionMode(QAbstractItemView::SingleSelection);
 	ListViewSpiele->setSelectionBehavior(QAbstractItemView::SelectRows);
-	
+
 	FrameOptionen->setEnabled(false);
-	
-	GnuboyOptionenBox->setVisible(false);
-	VBAOptionenBox->setVisible(false);
-	
+
+	/*GnuboyOptionenBox->setVisible(false);
+	VBAOptionenBox->setVisible(false);*/
+
 		// Reihenfolge der Listeneinträge ist wichtig, weil darüber nachher die Zuordnung für die Auswahl läuft!
 	ComboEmulator->addItem("GnuBoy");	// Erster Eintrag
 	ComboEmulator->addItem("VisualBoyAdvance"); // Zweiter Eintrag
 }
 
 
-void MainForm::connectObjects() {
+void CMainForm::connectObjects() {
 	// Ereignishandler fuer Widget registrieren
 	connect(ButtonEnde, SIGNAL(clicked()), this, SLOT(close()));
 	connect(ButtonStart, SIGNAL(clicked()), this, SLOT(btnStartClicked()));
@@ -97,32 +100,32 @@ void MainForm::connectObjects() {
 }
 
 
-void MainForm::btnStartClicked() {
+void CMainForm::btnStartClicked() {
 	QStringList Args;
 	QItemSelectionModel *selectionModel=ListViewSpiele->selectionModel();
-	
+
 	if(selectionModel->selectedRows().count()==1) {
-		CGBSpiel Spiel=Spieleliste->getItem(selectionModel->selectedRows().first());
-		
-		if(Spiel.getType()==CGBSpiel::INVALID) {
+		CGame Spiel=Spieleliste->getItem(selectionModel->selectedRows().first());
+
+		if(Spiel.getType()==CGame::INVALID) {
 			QMessageBox::warning(this, trUtf8("Spiel starten"), trUtf8("Die Datei \"%1\" scheint kein gültiges Gameboy-ROM zu sein. Das Spiel kann nicht gestartet werden.").arg(Spiel.getFilename()));
 			return;
 		}
-		if(Spiel.getType()==CGBSpiel::GAMEBOYADVANCE && Spiel.getOptions()->getEmulator()==CAbstraktOptions::GNUBOY) {
+		if(Spiel.getType()==CGame::GAMEBOYADVANCE && Spiel.getOptions().getEmulator()==CAbstractEmulatorOptions::GNUBOY) {
 			QMessageBox::warning(this, trUtf8("Spiel starten"), trUtf8("\"%1\" ist ein Gamboy Advance-Spiel. GnuBoy unterstützt die Emulation des Gamboy Advance aber nicht, weshalb dieses Spiel mit dem VBA ausgeführt werden muss.").arg(Spiel.getName()));
 			return;
 		}
 
 		// Emulator mit entsprechender Kommandozeile starten
-		Args=Spiel.getCommandLine();
+		Args=Spiel.getOptions().getCommandArgs();
 		Args+=Spiel.getFilename();
-		
+
 		/*QString cmdline;
 		for (int i = 0; i < Args.size(); ++i)
           		cmdline=cmdline+" "+Args.at(i);
 		QMessageBox::warning(this, trUtf8("Spiel starten"), cmdline);*/
-		
-		Gnuboy->start(Spiel.getEmuCommand(), Args);
+
+		Gnuboy->start(Spiel.getOptions().getEmuCommand(), Args);
 		if(Gnuboy->waitForStarted(-1)==false) {
 			QMessageBox::warning(this, trUtf8("Spiel starten"), trUtf8("Das Spiel konnte nicht gestartet werden. Es ist  ein Fehler aufgetreten."));
 		}
@@ -133,26 +136,26 @@ void MainForm::btnStartClicked() {
 }
 
 
-void MainForm::btnAddClicked() {
+void CMainForm::btnAddClicked() {
 	bool ok;
 	QString Spielname;
 	QString Filename=QFileDialog::getOpenFileName(this, trUtf8("ROM-Datei auswählen"), QDir::homePath(), trUtf8("GameBoy-ROMs (*.gb *.gbc *.gba)"));
-	
+
 	if(Filename!="") { // Mit OK verlassen
-		CGBSpiel Spiel(Filename);
+		CGame Spiel(Filename);
 		Spielname=QInputDialog::getText(this, trUtf8("Spielname eingeben"), trUtf8("Name des Spiels:"), QLineEdit::Normal, Spiel.getIdentifier(), &ok);
 		if(ok && !Spielname.isEmpty()) Spiel.setName(Spielname);
 		Spieleliste->addItem(Spiel);
-	
+
 		ListViewSpiele->resizeColumnsToContents();
 		ListViewSpiele->resizeRowsToContents();
 	}
 }
 
 
-void MainForm::btnDelClicked() {
+void CMainForm::btnDelClicked() {
 	QItemSelectionModel *selectionModel=ListViewSpiele->selectionModel();
-	
+
 	if(selectionModel->selectedRows().count()==1) {
  		Spieleliste->removeRow(selectionModel->selectedRows().first().row(), selectionModel->selectedRows().first());
 	}
@@ -162,7 +165,7 @@ void MainForm::btnDelClicked() {
 }
 
 
-void MainForm::gameStatusChanged(QProcess::ProcessState newState) {
+void CMainForm::gameStatusChanged(QProcess::ProcessState newState) {
 	switch(newState) {
 		case QProcess::NotRunning:
 			ButtonStart->setEnabled(true);
@@ -175,25 +178,25 @@ void MainForm::gameStatusChanged(QProcess::ProcessState newState) {
 }
 
 
-void MainForm::selectedGameChanged(const QItemSelection & selected, const QItemSelection & deselected) {
+void CMainForm::selectedGameChanged(const QItemSelection & selected, const QItemSelection & deselected) {
 	if(selected.count()==1) {
 		FrameOptionen->setEnabled(true);
 		// Spiel ausgewählt --> Optionen rechts anzeigen
-		if(Spieleliste->getItem(selected.indexes().first()).getOptions()->getEmulator()==CAbstraktOptions::GNUBOY) {
+		if(Spieleliste->getItem(selected.indexes().first()).getOptions().getEmulator()==CAbstractEmulatorOptions::GNUBOY) {
 			ComboEmulator->blockSignals(true);
-			ComboEmulator->setCurrentIndex(CAbstraktOptions::GNUBOY);
+			ComboEmulator->setCurrentIndex(CAbstractEmulatorOptions::GNUBOY);
 			ComboEmulator->blockSignals(false);
-			GnuboyOptionenBox->setOptionsPtr(((CGnuboyOptions*)Spieleliste->getItem(selected.indexes().first()).getOptions()));
+			/*GnuboyOptionenBox->setOptionsPtr(((CGnuboyOptions*)Spieleliste->getItem(selected.indexes().first()).getOptions()));
 			VBAOptionenBox->setVisible(false);
-			GnuboyOptionenBox->setVisible(true);
+			GnuboyOptionenBox->setVisible(true);*/
 		}
 		else {
 			ComboEmulator->blockSignals(true);
-			ComboEmulator->setCurrentIndex(CAbstraktOptions::VBA);
+			ComboEmulator->setCurrentIndex(CAbstractEmulatorOptions::VBA);
 			ComboEmulator->blockSignals(false);
-			VBAOptionenBox->setOptionsPtr(((CVBAOptions*)Spieleliste->getItem(selected.indexes().first()).getOptions()));
+			/*VBAOptionenBox->setOptionsPtr(((CVBAOptions*)Spieleliste->getItem(selected.indexes().first()).getOptions()));
 			GnuboyOptionenBox->setVisible(false);
-			VBAOptionenBox->setVisible(true);
+			VBAOptionenBox->setVisible(true);*/
 		}
 	}
 	else {
@@ -202,49 +205,57 @@ void MainForm::selectedGameChanged(const QItemSelection & selected, const QItemS
 }
 
 
-void MainForm::emulatorChanged(int index) {
+void CMainForm::emulatorChanged(int index) {
 	// Emulator geändert --> Widgets austauschen
-	CGBSpiel& Spiel=Spieleliste->getItem(ListViewSpiele->selectionModel()->selectedRows().first());
+	CGame& Spiel=Spieleliste->getItem(ListViewSpiele->selectionModel()->selectedRows().first());
 
-	if(index==CAbstraktOptions::GNUBOY) {
-		Spiel.changeEmulator(CAbstraktOptions::GNUBOY);
-		GnuboyOptionenBox->setOptionsPtr((CGnuboyOptions*)Spiel.getOptions());
+	if(index==CAbstractEmulatorOptions::GNUBOY) {
+		Spiel.changeEmulator(CAbstractEmulatorOptions::GNUBOY);
+		/*GnuboyOptionenBox->setOptionsPtr((CGnuboyOptions*)Spiel.getOptions());
 		VBAOptionenBox->setVisible(false);
-		GnuboyOptionenBox->setVisible(true);
+		GnuboyOptionenBox->setVisible(true);*/
 	}
 	else {
-		Spiel.changeEmulator(CAbstraktOptions::VBA);
-		VBAOptionenBox->setOptionsPtr((CVBAOptions*)Spiel.getOptions());
+		Spiel.changeEmulator(CAbstractEmulatorOptions::VBA);
+		/*VBAOptionenBox->setOptionsPtr((CVBAOptions*)Spiel.getOptions());
 		GnuboyOptionenBox->setVisible(false);
-		VBAOptionenBox->setVisible(true);
+		VBAOptionenBox->setVisible(true);*/
 	}
 }
 
 
-MainForm::MainForm(QWidget *parent):QWidget(parent) {
+CMainForm::CMainForm(QWidget *parent)
+   : QWidget(parent)
+{
 	// Icon für die Anwendung festlegen
 	QIcon Icon(":/img/gnuboy.png");
 	qApp->setWindowIcon(Icon);
 	this->setWindowTitle(trUtf8("KBoy"));
-	
+
 	// Objektmember initialisieren
-	Spieleliste=new CGBSpielListModel();
-	Spieleliste->fromXml(QDir::homePath()+"/.kboy/gamelist.xml"); // Wenn Datei nicht geladen werden kann, bleibt die Liste leer
+   CXmlGameListLoader loader(QDir::homePath()+"/.kboy/gamelist.xml");
+	Spieleliste=new CGameListModel();
+	loader.readGameList(Spieleliste); // Wenn Datei nicht geladen werden kann, bleibt die Liste leer
+   // TODO Exception handling...
 	Gnuboy=new QProcess(this);
-	
+
 	// Grafische Oberfläche aufbauen
 	initWidgets();
 	buildGUI();
 	configureWidgets();
-	
+
 	// Signal-/Slot-Objekte verknüpfen
 	connectObjects();
 }
 
 
-MainForm::~MainForm() {
+CMainForm::~CMainForm() {
 	// Spieleliste speichern
-	if(!Spieleliste->toXml(QDir::homePath()+"/.kboy/gamelist.xml")) {
+	CXmlGameListWriter writer(QDir::homePath()+"/.kboy/gamelist.xml");
+   try {
+      writer.writeGameList(Spieleliste);
+   }
+	catch(...) { // TODO: Correct exception handling...
 		QMessageBox::critical(this, trUtf8("Datei speichern nicht möglich"), trUtf8("Die Spieleliste kann nicht gespeichert werden! Schreiben in Datei \"%1\" nicht möglich!").arg(QDir::homePath()));
 	}
 	// TODO EmuOptionen löschen!
@@ -252,22 +263,3 @@ MainForm::~MainForm() {
 	//delete Spieleliste;
 }
 
-
-
-
-
-
-
-
-int main(int argc, char **argv) {
-	QApplication app(argc, argv);
-	
-	QTranslator qtTranslator;
-	qtTranslator.load("kboy_" + QLocale::system().name(), QDir::homePath()+"/.kboy/lang");
-	app.installTranslator(&qtTranslator);
-
-	MainForm dlg;
-	dlg.show();
- 
-	return app.exec();
-}

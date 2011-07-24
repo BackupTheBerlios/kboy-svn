@@ -1,3 +1,4 @@
+#if 0
 #include "CVBAOptionsWidget.h"
 
 CVBAOptionsWidget::CVBAOptionsWidget(QWidget *parent):CAbstraktOptionsWidget(parent) {
@@ -40,3 +41,5 @@ void CVBAOptionsWidget::setOptionsPtr(CVBAOptions *Options) {
 	SpinScale->setValue(prOptions->getScale());
 	EditCmdLine->setText(prOptions->getEmuCommand());
 }
+
+#endif

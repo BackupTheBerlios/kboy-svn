@@ -1,3 +1,4 @@
+#if 0
 #ifndef CVBAOPTIONSWIDGET
 #define CVBAOPTIONSWIDGET
 
@@ -23,5 +24,7 @@ class CVBAOptionsWidget : public CAbstraktOptionsWidget {
 	void ScaleChanged(int Scale);
 	void CmdlineChanged(const QString& text);
 };
+
+#endif
 
 #endif

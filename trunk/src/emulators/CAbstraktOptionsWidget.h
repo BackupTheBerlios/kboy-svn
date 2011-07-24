@@ -1,6 +1,11 @@
 #ifndef CABSTRAKTOPTIONSWIDGET_H
 #define CABSTRAKTOPTIONSWIDGET_H
 
+/* This class is not needed because we can simply give a QWidget* to the CMainForm.
+ */
+
+#if 0
+
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QFormLayout>
@@ -24,4 +29,5 @@ class CAbstraktOptionsWidget : public QWidget {
 	QLineEdit *EditCmdLine;
 };
 
+#endif
 #endif

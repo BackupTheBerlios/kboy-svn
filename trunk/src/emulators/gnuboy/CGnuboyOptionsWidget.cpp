@@ -1,3 +1,4 @@
+#if 0
 #include "CGnuboyOptionsWidget.h"
 
 CGnuboyOptionsWidget::CGnuboyOptionsWidget(QWidget *parent):CAbstraktOptionsWidget(parent) {
@@ -62,3 +63,5 @@ void CGnuboyOptionsWidget::setOptionsPtr(CGnuboyOptions *Options) {
 	SpinScale->setValue(prOptions->getScale());
 	EditCmdLine->setText(prOptions->getEmuCommand());
 }
+
+#endif

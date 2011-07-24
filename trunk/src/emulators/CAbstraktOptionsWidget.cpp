@@ -1,3 +1,5 @@
+#if 0
+  
 #include "CAbstraktOptionsWidget.h"
 
 CAbstraktOptionsWidget::CAbstraktOptionsWidget(QWidget *parent):QWidget(parent) {
@@ -26,4 +28,7 @@ CAbstraktOptionsWidget::CAbstraktOptionsWidget(QWidget *parent):QWidget(parent) 
 	// GUI-Elemente konfigurieren
 	SpinScale->setRange(1,4);
 	SpinScale->setSingleStep(1);
+
 }
+
+#endif
