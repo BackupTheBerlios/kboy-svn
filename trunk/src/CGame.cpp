@@ -1,8 +1,3 @@
-
-// TODO: Would be cool to get rid of this dependency...
-#include "emulators/gnuboy/CGnuboyOptions.hpp"
-#include "emulators/vba/CVBAOptions.hpp"
-
 #include "CGame.hpp"
 
 
@@ -90,20 +85,14 @@ bool CGame::ROMExists() const {
 
 
 
-// TODO: Find a better solution for the emulator change...
-// It's not good to have the distinction here again
-// Maybe build up some kind of factory for the emulator options?
 void CGame::changeEmulator(CAbstractEmulatorOptions::E_Emulator emulator) {
-   switch (emulator) {
-      case CAbstractEmulatorOptions::GNUBOY:
-         m_Options.reset(new CGnuboyOptions());
-         break;
-      case CAbstractEmulatorOptions::VBA:
-         m_Options.reset(new CVBAOptions());
-         break;
-   }
+      m_Options=CAbstractEmulatorOptions::createEmulatorOptions(emulator);
 }
 
+
+CAbstractEmulatorOptions& CGame::getOptions() {
+   return *m_Options;
+}
 
 const CAbstractEmulatorOptions& CGame::getOptions() const {
    return *m_Options;
@@ -122,14 +111,3 @@ CGame& CGame::operator=(const CGame& other) {
    m_Options=other.m_Options->clone();
 }
 
-
-#if 0
-QString CGame::getEmuCommand() const {
-   return prOptions->getEmuCommand();
-}
-
-QStringList CGame::getCommandLine() const {
-   // Return the emulator command line created by the appropriate emulator options object
-   return prOptions->getCommandArgs();
-}
-#endif

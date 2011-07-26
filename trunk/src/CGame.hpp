@@ -10,7 +10,7 @@
 #include "emulators/CAbstractEmulatorOptions.hpp"
 
 /** Repräsentiert ein zu emulierendes Gameboy-Spiel.
- * \todo Use auto-pointer for "obtions" pointer?
+ * \todo Use auto-pointer for "options" pointer?
  */
 class CGame {
 public:
@@ -35,13 +35,11 @@ public:
 
    bool ROMExists() const;
 
-#if 0
-   QStringList getCommandLine() const;
-   QString getEmuCommand() const;
-#endif
    void changeEmulator(CAbstractEmulatorOptions::E_Emulator EmuType);
 
+   CAbstractEmulatorOptions& getOptions();
    const CAbstractEmulatorOptions& getOptions() const;
+
    void setOptions(std::auto_ptr<CAbstractEmulatorOptions> options);
 
    CGame& operator=(const CGame& other);

@@ -39,6 +39,8 @@ public:
 
    std::auto_ptr<CAbstractEmulatorOptions> clone() const;
 
+   virtual QWidget* getOptionsWidget();
+
    virtual QStringList getCommandArgs() const;
 };
 

@@ -34,13 +34,13 @@ class CMainForm : public QWidget {
 	// Container
 	QGroupBox *FrameListe, *FrameOptionen;
 	QWidget *SpieleFrameButtonBox, *BoxRechts;
-	//CGnuboyOptionsWidget *GnuboyOptionenBox;
-	//CVBAOptionsWidget *VBAOptionenBox;
 
 	// Steuerelemente
 	QPushButton *ButtonAdd, *ButtonDel, *ButtonStart, *ButtonEnde;
 	QTableView *ListViewSpiele;
 	QComboBox *ComboEmulator;
+
+   QWidget *OptionsWidget; // Bleibt uninitialisiert bis ein Spiel ausgewählt wird
 
 	/* Sonstige Member */
 	QProcess *Gnuboy;

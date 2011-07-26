@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include <QWidget>
 #include <QXmlStreamReader>
 #include <QStringList>
 
@@ -17,7 +18,7 @@ public:
    virtual ~CAbstractEmulatorOptions() {}
 
 
-   virtual enum CAbstractEmulatorOptions::E_Emulator getEmulator() const;
+   virtual CAbstractEmulatorOptions::E_Emulator getEmulator() const;
    virtual void setEmulator(enum CAbstractEmulatorOptions::E_Emulator);
 
    virtual const QString& getEmuCommand() const = 0;
@@ -30,6 +31,11 @@ public:
    virtual bool isRomSupported(const QString& Filename) const = 0;
 
    virtual std::auto_ptr<CAbstractEmulatorOptions> clone() const = 0;
+
+   virtual QWidget* getOptionsWidget() = 0;
+
+
+   static std::auto_ptr<CAbstractEmulatorOptions> createEmulatorOptions(CAbstractEmulatorOptions::E_Emulator emulator);
 
 private:
    CAbstractEmulatorOptions::E_Emulator m_Emulator;

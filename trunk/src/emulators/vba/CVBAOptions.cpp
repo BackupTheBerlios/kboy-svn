@@ -1,3 +1,6 @@
+
+#include "emulators/vba/CVBAOptionsWidget.hpp"
+
 #include "emulators/vba/CVBAOptions.hpp"
 
 
@@ -57,3 +60,7 @@ QStringList CVBAOptions::getCommandArgs() const {
 	return Args;
 }
 
+
+QWidget* CVBAOptions::getOptionsWidget() {
+   return new CVBAOptionsWidget(*this, (QWidget*)0);
+}

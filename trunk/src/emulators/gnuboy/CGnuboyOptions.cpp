@@ -1,4 +1,6 @@
 
+#include "emulators/gnuboy/CGnuboyOptionsWidget.hpp"
+
 #include "emulators/gnuboy/CGnuboyOptions.hpp"
 
 CGnuboyOptions::CGnuboyOptions() {
@@ -79,4 +81,9 @@ QStringList CGnuboyOptions::getCommandArgs() const {
 	if(getScale()>1) Args.append("--scale="+QString::number(getScale()));
 
 	return Args;
+}
+
+
+QWidget* CGnuboyOptions::getOptionsWidget() {
+   return new CGnuboyOptionsWidget(*this, 0);
 }
