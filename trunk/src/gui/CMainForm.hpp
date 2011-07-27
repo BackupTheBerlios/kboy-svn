@@ -43,8 +43,8 @@ class CMainForm : public QWidget {
    QWidget *OptionsWidget; // Bleibt uninitialisiert bis ein Spiel ausgewählt wird
 
 	/* Sonstige Member */
-	QProcess *Gnuboy;
-	CGameListModel *Spieleliste;
+	QProcess *m_EmuProcess;
+	CGameListModel *m_GameList;
 
 	// Methoden
 	void buildGUI();

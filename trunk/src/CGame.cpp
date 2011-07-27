@@ -4,7 +4,7 @@
 CGame::CGame(QString filename) {
    this->setFilename(filename);
 
-   // Set Gnuboy options to be the standard
+   // Set Gnuboy to be the standard
    changeEmulator(CAbstractEmulatorOptions::GNUBOY);
 }
 
@@ -21,11 +21,6 @@ CGame::CGame(const CGame& other) {
 
    // clone the options object
    m_Options=other.m_Options->clone();
-}
-
-
-CGame::~CGame() {
-
 }
 
 
@@ -54,7 +49,7 @@ QString CGame::getIdentifier() const {
 
    if (getType()==GAMEBOYADVANCE) return "GBA - NYI"; // TODO: Add support for GBA
 
-   if (!this->ROMExists()) return FailedString;
+   if (!this->romExists()) return FailedString;
    if (!BinFile.open(QIODevice::ReadOnly)) return FailedString;
    // Seek to the begin of the name string (first character is at 0x134)
    if (!BinFile.seek(0x134)) {
@@ -79,7 +74,7 @@ enum CGame::E_GBType CGame::getType() const {
    else return INVALID;
 }
 
-bool CGame::ROMExists() const {
+bool CGame::romExists() const {
    return QFile::exists(m_Filename);
 }
 

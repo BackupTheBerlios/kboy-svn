@@ -9,19 +9,16 @@
 
 #include "emulators/CAbstractEmulatorOptions.hpp"
 
-/** Repräsentiert ein zu emulierendes Gameboy-Spiel.
- * \todo Use auto-pointer for "options" pointer?
+/** This class describes a GameBoy game that can be emulated.
  */
 class CGame {
 public:
    enum E_GBType { INVALID, GAMEBOY, GAMEBOYCOLOR, GAMEBOYADVANCE };
 
-   CGame(QString Filename);
-   CGame(QString Filename, CAbstractEmulatorOptions::E_Emulator emulator);
+   CGame(QString filename);
+   CGame(QString filename, CAbstractEmulatorOptions::E_Emulator emulator);
 
    CGame(const CGame& other);
-
-   ~CGame();
 
    const QString& getName() const;
    void setName(const QString& name);
@@ -33,9 +30,9 @@ public:
 
    enum CGame::E_GBType getType() const;
 
-   bool ROMExists() const;
+   bool romExists() const;
 
-   void changeEmulator(CAbstractEmulatorOptions::E_Emulator EmuType);
+   void changeEmulator(CAbstractEmulatorOptions::E_Emulator emulator);
 
    CAbstractEmulatorOptions& getOptions();
    const CAbstractEmulatorOptions& getOptions() const;

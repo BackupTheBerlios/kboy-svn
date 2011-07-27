@@ -26,7 +26,7 @@ QVariant CGameListModel::data(const QModelIndex& index, int role) const {
       case STATUS: // Icon column
          if (role==Qt::DecorationRole) {
             // The view wants the content of the icon column
-            if (this->m_GameList[index.row()].ROMExists() ==false) {
+            if (this->m_GameList[index.row()].romExists() ==false) {
                return QIcon(":/img/x.png");
             }
             else if (this->m_GameList[index.row()].getType() == CGame::GAMEBOY) {
@@ -42,7 +42,7 @@ QVariant CGameListModel::data(const QModelIndex& index, int role) const {
          }
          else if (role==Qt::ToolTipRole) {
             // The view wants the tooltip text for the icon column
-            if (this->m_GameList[index.row()].ROMExists() == false) {
+            if (this->m_GameList[index.row()].romExists() == false) {
                return trUtf8("ROM-Datei nicht gefunden");
             }
             else if (this->m_GameList[index.row()].getType() == CGame::GAMEBOY) {
