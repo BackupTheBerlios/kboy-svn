@@ -23,46 +23,54 @@
 
 
 class CMainForm : public QWidget {
- Q_OBJECT
+   Q_OBJECT
 
- private:
- 	/* Private Member für GUI */
-	// Layouts
-	QHBoxLayout *MainHBox, *SpieleButtonHBox;
-	QVBoxLayout *RechtsVBox, *SpieleFrameBox, *OptionenVBox;
+private:
+   /* Private member for GUI */
+   // layouts
+   QHBoxLayout *m_MainHBox;
+   QHBoxLayout *m_GamesButtonHBox;
+   QVBoxLayout *m_RechtsVBox;
+   QVBoxLayout *m_GamesFrameBox;
+   QVBoxLayout *m_OptionsVBox;
 
-	// Container
-	QGroupBox *FrameListe, *FrameOptionen;
-	QWidget *SpieleFrameButtonBox, *BoxRechts;
+   // container
+   QGroupBox *m_FrameGamesList;
+   QGroupBox *m_FrameOptions;
+   QWidget *m_GamesFrameButtonBox;
+   QWidget *m_BoxRight;
 
-	// Steuerelemente
-	QPushButton *ButtonAdd, *ButtonDel, *ButtonStart, *ButtonEnde;
-	QTableView *ListViewSpiele;
-	QComboBox *ComboEmulator;
+   // control widgets
+   QPushButton *m_ButtonAdd;
+   QPushButton *m_ButtonDel;
+   QPushButton *m_ButtonStart;
+   QPushButton *m_ButtonEnde;
+   QTableView *m_ListViewGames;
+   QComboBox *m_ComboEmulator;
 
-   QWidget *OptionsWidget; // Bleibt uninitialisiert bis ein Spiel ausgewählt wird
+   QWidget *m_OptionsWidget; // Stay uninitialized until a game was selected
 
-	/* Sonstige Member */
-	QProcess *m_EmuProcess;
-	CGameListModel *m_GameList;
+   /* other member */
+   QProcess *m_EmuProcess;
+   CGameListModel *m_GameList;
 
-	// Methoden
-	void buildGUI();
-	void initWidgets();
-	void configureWidgets();
-	void connectObjects();
+   // methods
+   void buildGUI();
+   void initWidgets();
+   void configureWidgets();
+   void connectObjects();
 
- private slots:
-	void btnStartClicked();
-	void btnAddClicked();
-	void btnDelClicked();
-	void gameStatusChanged(QProcess::ProcessState newState);
-	void selectedGameChanged(const QItemSelection & selected, const QItemSelection & deselected);
-	void emulatorChanged(int index);
+private slots:
+   void btnStartClicked();
+   void btnAddClicked();
+   void btnDelClicked();
+   void gameStatusChanged(QProcess::ProcessState newState);
+   void selectedGameChanged(const QItemSelection & selected, const QItemSelection & deselected);
+   void emulatorChanged(int index);
 
- public:
-	CMainForm(QWidget *parent=0);
-	virtual ~CMainForm();
+public:
+   CMainForm(QWidget *parent = 0);
+   virtual ~CMainForm();
 };
 
 #endif

@@ -7,272 +7,290 @@
 #include "gui/CMainForm.hpp"
 
 void CMainForm::initWidgets() {
-    // Alle Widgets initialisieren
-    // Layouts
-    MainHBox = new QHBoxLayout();
-    SpieleButtonHBox = new QHBoxLayout();
-    SpieleFrameBox = new QVBoxLayout();
-    RechtsVBox = new QVBoxLayout();
-    OptionenVBox = new QVBoxLayout();
+   // Initialize all widgets
+   // layout objects
+   m_MainHBox = new QHBoxLayout();
+   m_GamesButtonHBox = new QHBoxLayout();
+   m_GamesFrameBox = new QVBoxLayout();
+   m_RechtsVBox = new QVBoxLayout();
+   m_OptionsVBox = new QVBoxLayout();
 
-    // Container
-    FrameListe = new QGroupBox(trUtf8("Rom-Files"));
-    FrameOptionen = new QGroupBox(trUtf8("Emulator-Optionen"));
-    SpieleFrameButtonBox = new QWidget();
-    BoxRechts = new QWidget();
+   // container objects
+   m_FrameGamesList = new QGroupBox(trUtf8("Rom-Files"));
+   m_FrameOptions = new QGroupBox(trUtf8("Emulator-Optionen"));
+   m_GamesFrameButtonBox = new QWidget();
+   m_BoxRight = new QWidget();
 
 
-    // Steuerelemente
-    ButtonAdd = new QPushButton(trUtf8("Hinzufügen"));
-    ButtonDel = new QPushButton(trUtf8("Entfernen"));
-    ButtonStart = new QPushButton(trUtf8("Spiel starten"));
-    ButtonEnde = new QPushButton(trUtf8("Schließen"));
-    ListViewSpiele = new QTableView();
-    ComboEmulator = new QComboBox();
+   // control widgets
+   m_ButtonAdd = new QPushButton(trUtf8("Hinzufügen"));
+   m_ButtonDel = new QPushButton(trUtf8("Entfernen"));
+   m_ButtonStart = new QPushButton(trUtf8("Spiel starten"));
+   m_ButtonEnde = new QPushButton(trUtf8("Schließen"));
+   m_ListViewGames = new QTableView();
+   m_ComboEmulator = new QComboBox();
 }
 
 
 void CMainForm::buildGUI() {
-    // Oberfläche zusammenbauen
+   // build the actual GUI
 
-    /* Linker Frame (m_GameList) */
-    // Buttonleiste
-    SpieleButtonHBox->addWidget(ButtonAdd);
-    SpieleButtonHBox->addWidget(ButtonDel);
-    SpieleFrameButtonBox->setLayout(SpieleButtonHBox);
-    // Spiele-Frame
-    SpieleFrameBox->addWidget(ListViewSpiele);
-    SpieleFrameBox->addWidget(SpieleFrameButtonBox);
-    FrameListe->setLayout(SpieleFrameBox);
+   /* left frame (game list) */
+   // buttons at the bottom
+   m_GamesButtonHBox->addWidget(m_ButtonAdd);
+   m_GamesButtonHBox->addWidget(m_ButtonDel);
+   m_GamesFrameButtonBox->setLayout(m_GamesButtonHBox);
+   // games frame
+   m_GamesFrameBox->addWidget(m_ListViewGames);
+   m_GamesFrameBox->addWidget(m_GamesFrameButtonBox);
+   m_FrameGamesList->setLayout(m_GamesFrameBox);
 
-    /* Rechter Frame (Optionen & Buttons) */
-    // Optionen-Feld
-    OptionenVBox->addWidget(ComboEmulator);
-    OptionenVBox->addSpacing(15);
-    /* Ende Emulator-Optionen */
+   /* right frame (options & buttons) */
+   // options widget
+   m_OptionsVBox->addWidget(m_ComboEmulator);
+   m_OptionsVBox->addSpacing(15);
+   /* end of emulator options */
 
-    FrameOptionen->setLayout(OptionenVBox);
-    RechtsVBox->addWidget(FrameOptionen);
-    RechtsVBox->addWidget(ButtonStart);
-    RechtsVBox->addSpacing(10);
-    RechtsVBox->addWidget(ButtonEnde);
-    BoxRechts->setLayout(RechtsVBox);
+   // controlling buttons at the bottom
+   m_FrameOptions->setLayout(m_OptionsVBox);
+   m_RechtsVBox->addWidget(m_FrameOptions);
+   m_RechtsVBox->addWidget(m_ButtonStart);
+   m_RechtsVBox->addSpacing(10);
+   m_RechtsVBox->addWidget(m_ButtonEnde);
+   m_BoxRight->setLayout(m_RechtsVBox);
 
-    /* Haupt-Layout */
-    MainHBox->addWidget(FrameListe);
-    MainHBox->addWidget(BoxRechts);
-    this->setLayout(MainHBox);
+   /* main layout */
+   m_MainHBox->addWidget(m_FrameGamesList);
+   m_MainHBox->addWidget(m_BoxRight);
+   this->setLayout(m_MainHBox);
 }
 
 
 void CMainForm::configureWidgets() {
-    // Widgets konfigurieren
-    MainHBox->setStretchFactor(FrameListe, 2);
+   // configure all widgets
+   m_MainHBox->setStretchFactor(m_FrameGamesList, 2);
 
-    ListViewSpiele->setModel(m_GameList);
-    ListViewSpiele->verticalHeader()->hide();
-    ListViewSpiele->setWordWrap(false);
-    ListViewSpiele->resizeColumnsToContents();
-    ListViewSpiele->resizeRowsToContents();
-    ListViewSpiele->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ListViewSpiele->setSelectionMode(QAbstractItemView::SingleSelection);
-    ListViewSpiele->setSelectionBehavior(QAbstractItemView::SelectRows);
+   m_ListViewGames->setModel(m_GameList);
+   m_ListViewGames->verticalHeader()->hide();
+   m_ListViewGames->setWordWrap(false);
+   m_ListViewGames->resizeColumnsToContents();
+   m_ListViewGames->resizeRowsToContents();
+   m_ListViewGames->setEditTriggers(QAbstractItemView::NoEditTriggers);
+   m_ListViewGames->setSelectionMode(QAbstractItemView::SingleSelection);
+   m_ListViewGames->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    FrameOptionen->setEnabled(false);
+   m_FrameOptions->setEnabled(false);
 
-    // Reihenfolge der Listeneinträge ist wichtig, weil darüber nachher die Zuordnung für die Auswahl läuft!
-    ComboEmulator->addItem("GnuBoy"); // Erster Eintrag
-    ComboEmulator->addItem("VisualBoyAdvance"); // Zweiter Eintrag
+   this->setMinimumSize(QSize(this->width(), this->height()));
+
+   // The ordering of the combo list items is important, because later their position index is assigned to the value of
+   // CAbstractEmulatorOptions::E_Emulator enum
+   m_ComboEmulator->addItem("GnuBoy"); // first item (0)
+   m_ComboEmulator->addItem("VisualBoyAdvance"); // second item (1)
 }
 
 
 void CMainForm::connectObjects() {
-    // Ereignishandler fuer Widget registrieren
-    connect(ButtonEnde, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ButtonStart, SIGNAL(clicked()), this, SLOT(btnStartClicked()));
-    connect(ButtonAdd, SIGNAL(clicked()), this, SLOT(btnAddClicked()));
-    connect(ButtonDel, SIGNAL(clicked()), this, SLOT(btnDelClicked()));
-    connect(m_EmuProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(gameStatusChanged(QProcess::ProcessState)));
-    connect(ListViewSpiele->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(selectedGameChanged(const QItemSelection&, const QItemSelection&)));
-    connect(ComboEmulator, SIGNAL(currentIndexChanged(int)), this, SLOT(emulatorChanged(int)));
+   // register all events of the main widgets
+   connect(m_ButtonEnde, SIGNAL(clicked()), this, SLOT(close()));
+   connect(m_ButtonStart, SIGNAL(clicked()), this, SLOT(btnStartClicked()));
+   connect(m_ButtonAdd, SIGNAL(clicked()), this, SLOT(btnAddClicked()));
+   connect(m_ButtonDel, SIGNAL(clicked()), this, SLOT(btnDelClicked()));
+   connect(m_EmuProcess, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(gameStatusChanged(QProcess::ProcessState)));
+   connect(m_ListViewGames->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this,
+           SLOT(selectedGameChanged(const QItemSelection&, const QItemSelection&)));
+   connect(m_ComboEmulator, SIGNAL(currentIndexChanged(int)), this, SLOT(emulatorChanged(int)));
 }
 
 
 void CMainForm::btnStartClicked() {
-    QStringList Args;
-    QItemSelectionModel *selectionModel = ListViewSpiele->selectionModel();
+   // Start the currently selected game
+   QStringList args;
+   QItemSelectionModel *selectionModel = m_ListViewGames->selectionModel();
 
-    if (selectionModel->selectedRows().count() == 1) {
-        CGame Spiel = m_GameList->getItem(selectionModel->selectedRows().first());
+   if (selectionModel->selectedRows().count() == 1) {
+      CGame game = m_GameList->getItem(selectionModel->selectedRows().first());
 
-        if (Spiel.getType() == CGame::INVALID) {
-            QMessageBox::warning(this, trUtf8("Spiel starten"), trUtf8("Die Datei \"%1\" scheint kein gültiges Gameboy-ROM zu sein. Das Spiel kann nicht gestartet werden.").arg(Spiel.getFilename()));
-            return;
-        }
-        if (Spiel.getType() == CGame::GAMEBOYADVANCE && Spiel.getOptions().getEmulator() == CAbstractEmulatorOptions::GNUBOY) {
-            QMessageBox::warning(this, trUtf8("Spiel starten"), trUtf8("\"%1\" ist ein Gamboy Advance-Spiel. GnuBoy unterstützt die Emulation des Gamboy Advance aber nicht, weshalb dieses Spiel mit dem VBA ausgeführt werden muss.").arg(Spiel.getName()));
-            return;
-        }
+      if (game.getType() == CGame::INVALID) {
+         QMessageBox::warning(this, trUtf8("Spiel starten"),
+                              trUtf8("Die Datei \"%1\" scheint kein gültiges Gameboy-ROM zu sein. Das Spiel kann nicht gestartet werden.")
+                              .arg(game.getFilename()));
+         return;
+      }
+      // TODO: Outsource compatibility test to game/options
+      if (game.getType() == CGame::GAMEBOYADVANCE && game.getOptions().getEmulator() == CAbstractEmulatorOptions::GNUBOY) {
+         QMessageBox::warning(this, trUtf8("Spiel starten"),trUtf8("\"%1\" ist ein Gamboy Advance-Spiel. GnuBoy unterstützt die Emulation \
+            des Gamboy Advance aber nicht, weshalb dieses Spiel mit dem VBA ausgeführt werden muss.").arg(game.getName()));
+         return;
+      }
 
-        // Emulator mit entsprechender Kommandozeile starten
-        Args = Spiel.getOptions().getCommandArgs();
-        Args += Spiel.getFilename();
+      // Start the selected emulator with a command line according to all configured options
+      args = game.getOptions().getCommandArgs();
+      args += game.getFilename();
 
-        // Print out the command line for debugging porposes
-        qDebug() << "Starting emulator with command: " << Spiel.getOptions().getEmuCommand();
-        qDebug() << "and command line arguments: " << Args;
+      // Print out the command line for debugging porposes
+      qDebug() << "Starting emulator with command: " << game.getOptions().getEmuCommand();
+      qDebug() << "and command line arguments: " << args;
 
 
-        m_EmuProcess->start(Spiel.getOptions().getEmuCommand(), Args);
-        if (m_EmuProcess->waitForStarted(-1) == false) {
-            QMessageBox::warning(this, trUtf8("Spiel starten"), trUtf8("Das Spiel konnte nicht gestartet werden. Es ist  ein Fehler aufgetreten."));
-        }
-    }
-    else {
-        QMessageBox::warning(this, trUtf8("Spiel starten"), trUtf8("Es ist kein Spiel ausgewählt! Bitte wähle das gewünschte Spiel aus der Liste aus!"));
-    }
+      m_EmuProcess->start(game.getOptions().getEmuCommand(), args);
+      if (m_EmuProcess->waitForStarted(-1) == false) {
+         QMessageBox::warning(this, trUtf8("Spiel starten"), trUtf8("Das Spiel konnte nicht gestartet werden. Es ist  ein Fehler aufgetreten."));
+      }
+   }
+   else {
+      QMessageBox::warning(this, trUtf8("Spiel starten"), trUtf8("Es ist kein Spiel ausgewählt! Bitte wähle das gewünschte Spiel aus der Liste aus!"));
+   }
 }
 
 
 void CMainForm::btnAddClicked() {
-    bool ok;
-    QString gametitle;
-    QString filename = QFileDialog::getOpenFileName(this, trUtf8("ROM-Datei auswählen"), QDir::homePath(), trUtf8("GameBoy-ROMs (*.gb *.gbc *.gba)"));
+   // Add a new game
+   bool ok;
+   QString gametitle;
+   QString filename = QFileDialog::getOpenFileName(this, trUtf8("ROM-Datei auswählen"), QDir::homePath(), trUtf8("GameBoy-ROMs (*.gb *.gbc *.gba)"));
 
-    if (filename != "") { // Mit OK verlassen
-        CGame Spiel(filename);
-        gametitle = QInputDialog::getText(this, trUtf8("Spielname eingeben"), trUtf8("Name des Spiels:"), QLineEdit::Normal, Spiel.getIdentifier(), &ok);
-        if (ok && !gametitle.isEmpty()) Spiel.setName(gametitle);
-        m_GameList->addItem(Spiel);
+   if (filename != "") { // Cancel the process when clicking "cancel" ;)
+      CGame game(filename);
+      gametitle = QInputDialog::getText(this, trUtf8("Spielname eingeben"), trUtf8("Name des Spiels:"), QLineEdit::Normal, game.getIdentifier(), &ok);
+      if (ok && !gametitle.isEmpty()) game.setName(gametitle);
+      m_GameList->addItem(game);
 
-        ListViewSpiele->resizeColumnsToContents();
-        ListViewSpiele->resizeRowsToContents();
-    }
+      // resize the view columns and rows to fit all the contents
+      m_ListViewGames->resizeColumnsToContents();
+      m_ListViewGames->resizeRowsToContents();
+   }
 }
 
 
 void CMainForm::btnDelClicked() {
-    QItemSelectionModel *selectionModel = ListViewSpiele->selectionModel();
+   // Remove the currently selected game from the list
+   QItemSelectionModel *selectionModel = m_ListViewGames->selectionModel();
 
-    if (selectionModel->selectedRows().count() == 1) {
-        m_GameList->removeRow(selectionModel->selectedRows().first().row(), selectionModel->selectedRows().first());
-    }
-    else {
-        QMessageBox::warning(this, trUtf8("Spiel löschen"), trUtf8("Es ist kein Spiel ausgewählt! Bitte wähle das zu löschende Spiel aus der Liste aus!"));
-    }
+   if (selectionModel->selectedRows().count() == 1) {
+      m_GameList->removeRow(selectionModel->selectedRows().first().row(), selectionModel->selectedRows().first());
+   }
+   else {
+      QMessageBox::warning(this, trUtf8("Spiel löschen"), trUtf8("Es ist kein Spiel ausgewählt! Bitte wähle das zu löschende Spiel aus der Liste aus!"));
+   }
 }
 
 
 void CMainForm::gameStatusChanged(QProcess::ProcessState newState) {
-    switch (newState) {
-    case QProcess::NotRunning:
-        ButtonStart->setEnabled(true);
-        break;
-    case QProcess::Starting:
-    case QProcess::Running:
-        ButtonStart->setEnabled(false);
-        break;
-    }
+   // Will be called when a sub-process (the game emulator) started or ended
+   switch (newState) {
+   case QProcess::NotRunning:
+      m_ButtonStart->setEnabled(true);
+      break;
+   case QProcess::Starting:
+   case QProcess::Running:
+      m_ButtonStart->setEnabled(false);
+      break;
+   }
 }
 
 
 void CMainForm::selectedGameChanged(const QItemSelection & selected, const QItemSelection & deselected) {
-    if (selected.count() == 1) {
-        FrameOptionen->setEnabled(true);
+   // The user selected another game entry in the table list view
+   if (selected.count() == 1) {
+      m_FrameOptions->setEnabled(true);
 
-        // Spiel ausgewählt --> Optionen rechts anzeigen
-        CAbstractEmulatorOptions& gameOptions = m_GameList->getItem(selected.indexes().first()).getOptions();
-        if (gameOptions.getEmulator() == CAbstractEmulatorOptions::GNUBOY) {
-            ComboEmulator->blockSignals(true);
-            ComboEmulator->setCurrentIndex(CAbstractEmulatorOptions::GNUBOY);
-            ComboEmulator->blockSignals(false);
-        }
-        else {
-            ComboEmulator->blockSignals(true);
-            ComboEmulator->setCurrentIndex(CAbstractEmulatorOptions::VBA);
-            ComboEmulator->blockSignals(false);
-        }
-        // remove the options widget from the layout and delete it, but only if it's there at all ;)
-        if (OptionsWidget != 0) {
-            OptionenVBox->removeWidget(OptionsWidget);
-            delete OptionsWidget;
-        }
+      // A game was selected --> show the corresponding options widget on the right side
+      CAbstractEmulatorOptions& gameOptions = m_GameList->getItem(selected.indexes().first()).getOptions();
+      if (gameOptions.getEmulator() == CAbstractEmulatorOptions::GNUBOY) {
+         m_ComboEmulator->blockSignals(true);
+         m_ComboEmulator->setCurrentIndex(CAbstractEmulatorOptions::GNUBOY);
+         m_ComboEmulator->blockSignals(false);
+      }
+      else {
+         m_ComboEmulator->blockSignals(true);
+         m_ComboEmulator->setCurrentIndex(CAbstractEmulatorOptions::VBA);
+         m_ComboEmulator->blockSignals(false);
+      }
+      // Remove the old options widget from the layout and delete it, but only if it's there at all ;)
+      if (m_OptionsWidget != 0) {
+         m_OptionsVBox->removeWidget(m_OptionsWidget);
+         delete m_OptionsWidget;
+      }
 
-        // Show the options widget that corresponds to the new loaded "options" object
-        OptionsWidget = gameOptions.getOptionsWidget();
-        OptionenVBox->addWidget(OptionsWidget);
-    }
-    else {
-        FrameOptionen->setEnabled(false);
-    }
+      // Show the options widget that corresponds to the new loaded "options" object
+      m_OptionsWidget = gameOptions.getOptionsWidget();
+      m_OptionsVBox->addWidget(m_OptionsWidget);
+   }
+   else {
+      m_FrameOptions->setEnabled(false);
+   }
 }
 
 
 void CMainForm::emulatorChanged(int index) {
-    // Emulator geändert --> Widgets austauschen
-    CGame& currentGame = m_GameList->getItem(ListViewSpiele->selectionModel()->selectedRows().first());
+   // Another emulator was chosen for the current game --> Change the options widget (all formerly emulator options will be lost))
+   CGame& currentGame = m_GameList->getItem(m_ListViewGames->selectionModel()->selectedRows().first());
 
-    // remove the options widget from the layout and delete it, but only if it's there at all ;)
-    if (OptionsWidget != 0) {
-        OptionenVBox->removeWidget(OptionsWidget);
-        delete OptionsWidget;
-    }
+   // remove the options widget from the layout and delete it, but only if it's there at all ;)
+   if (m_OptionsWidget != 0) {
+      m_OptionsVBox->removeWidget(m_OptionsWidget);
+      delete m_OptionsWidget;
+   }
 
-    if (index == CAbstractEmulatorOptions::GNUBOY) {
-        currentGame.changeEmulator(CAbstractEmulatorOptions::GNUBOY);
-    }
-    else {
-        currentGame.changeEmulator(CAbstractEmulatorOptions::VBA);
-    }
+   if (index == CAbstractEmulatorOptions::GNUBOY) {
+      currentGame.changeEmulator(CAbstractEmulatorOptions::GNUBOY);
+   }
+   else {
+      currentGame.changeEmulator(CAbstractEmulatorOptions::VBA);
+   }
 
-    // Show the options widget that corresponds to the new loaded "options" object
-    OptionsWidget = currentGame.getOptions().getOptionsWidget();
-    OptionenVBox->addWidget(OptionsWidget);
+   // Show the options widget that corresponds to the new loaded "options" object
+   m_OptionsWidget = currentGame.getOptions().getOptionsWidget();
+   m_OptionsVBox->addWidget(m_OptionsWidget);
 }
+
 
 
 CMainForm::CMainForm(QWidget *parent)
         : QWidget(parent)
-        , OptionsWidget(0) {
-    // Icon für die Anwendung festlegen
-    QIcon icon(":/img/gnuboy.png");
-    qApp->setWindowIcon(icon);
-    this->setWindowTitle(trUtf8("KBoy"));
+        , m_GameList(new CGameListModel())
+        , m_OptionsWidget(0)
+{
+   // Define an application icon
+   QIcon icon(":/img/gnuboy.png");
+   qApp->setWindowIcon(icon);
+   this->setWindowTitle(trUtf8("KBoy"));
 
-    // Objektmember initialisieren
-    CXmlGameListLoader loader(QDir::homePath() + "/.kboy/gamelist.xml");
-    m_GameList = new CGameListModel();
-    loader.readGameList(m_GameList); // Wenn Datei nicht geladen werden kann, bleibt die Liste leer
-    // TODO Exception handling...
-    m_EmuProcess = new QProcess(this);
+   // Load the game list
+   CXmlGameListLoader loader(QDir::homePath() + "/.kboy/gamelist.xml");
+   loader.readGameList(m_GameList); // The list will simply stay empty on read/parse error
+   // TODO Exception handling for file reading...
 
-    // Grafische Oberfläche aufbauen
-    initWidgets();
-    buildGUI();
-    configureWidgets();
+   m_EmuProcess = new QProcess(this);
 
-    // Signal-/Slot-Objekte verknüpfen
-    connectObjects();
+   // Build the GUI
+   initWidgets();
+   buildGUI();
+   configureWidgets();
+
+   // connect all signals and slots
+   connectObjects();
 }
 
 
 CMainForm::~CMainForm() {
-    // m_GameList speichern
-    CXmlGameListWriter writer(QDir::homePath() + "/.kboy/gamelist.xml");
-    try {
-        writer.writeGameList(m_GameList);
-    }
-    catch (...) { // TODO: Correct exception handling...
-        QMessageBox::critical(this, trUtf8("Datei speichern nicht möglich"), trUtf8("Die m_GameList kann nicht gespeichert werden! Schreiben in Datei \"%1\" nicht möglich!").arg(QDir::homePath()));
-    }
-    // TODO EmuOptionen löschen!
-    // remove the options widget from the layout and delete it, but only if it's there at all ;)
-    if (OptionsWidget != 0) {
-        OptionenVBox->removeWidget(OptionsWidget);
-        delete OptionsWidget;
-    }
+   // Save the game list to disk
+   CXmlGameListWriter writer(QDir::homePath() + "/.kboy/gamelist.xml");
+   try {
+      writer.writeGameList(m_GameList);
+   }
+   catch (...) { // TODO: Correct exception handling...
+      QMessageBox::critical(this, trUtf8("Datei speichern nicht möglich"), trUtf8("Die m_GameList kann nicht gespeichert werden! Schreiben in Datei \"%1\" nicht möglich!").arg(QDir::homePath()));
+   }
 
-    delete m_EmuProcess;
-    //delete m_GameList;
+   // remove the options widget from the layout and delete it, but only if it's there at all ;)
+   if (m_OptionsWidget != 0) {
+      m_OptionsVBox->removeWidget(m_OptionsWidget);
+      delete m_OptionsWidget;
+   }
+
+   delete m_EmuProcess;
+   delete m_GameList;
 }
 
