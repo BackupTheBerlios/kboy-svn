@@ -16,17 +16,17 @@ void CMainForm::initWidgets() {
    m_OptionsVBox = new QVBoxLayout();
 
    // container objects
-   m_FrameGamesList = new QGroupBox(trUtf8("Rom-Files"));
-   m_FrameOptions = new QGroupBox(trUtf8("Emulator-Optionen"));
+   m_FrameGamesList = new QGroupBox(trUtf8("Games"));
+   m_FrameOptions = new QGroupBox(trUtf8("Emulator configuration"));
    m_GamesFrameButtonBox = new QWidget();
    m_BoxRight = new QWidget();
 
 
    // control widgets
-   m_ButtonAdd = new QPushButton(trUtf8("Hinzufügen"));
-   m_ButtonDel = new QPushButton(trUtf8("Entfernen"));
-   m_ButtonStart = new QPushButton(trUtf8("Spiel starten"));
-   m_ButtonEnde = new QPushButton(trUtf8("Schließen"));
+   m_ButtonAdd = new QPushButton(trUtf8("Add new"));
+   m_ButtonDel = new QPushButton(trUtf8("Remove"));
+   m_ButtonStart = new QPushButton(trUtf8("Start game"));
+   m_ButtonEnde = new QPushButton(trUtf8("Quit"));
    m_ListViewGames = new QTableView();
    m_ComboEmulator = new QComboBox();
 }
@@ -82,6 +82,7 @@ void CMainForm::configureWidgets() {
    m_FrameOptions->setEnabled(false);
 
    this->setMinimumSize(QSize(this->width(), this->height()));
+   //this->setMinimumWidth(this->width());
 
    // The ordering of the combo list items is important, because later their position index is assigned to the value of
    // CAbstractEmulatorOptions::E_Emulator enum
@@ -112,15 +113,15 @@ void CMainForm::btnStartClicked() {
       CGame game = m_GameList->getItem(selectionModel->selectedRows().first());
 
       if (game.getType() == CGame::INVALID) {
-         QMessageBox::warning(this, trUtf8("Spiel starten"),
-                              trUtf8("Die Datei \"%1\" scheint kein gültiges Gameboy-ROM zu sein. Das Spiel kann nicht gestartet werden.")
+         QMessageBox::warning(this, trUtf8("Starting game"),
+                              trUtf8("The file \"%1\" doesn't seem to be a valid GameBoy ROM file. The game cannot be started.")
                               .arg(game.getFilename()));
          return;
       }
       // TODO: Outsource compatibility test to game/options
       if (game.getType() == CGame::GAMEBOYADVANCE && game.getOptions().getEmulator() == CAbstractEmulatorOptions::GNUBOY) {
-         QMessageBox::warning(this, trUtf8("Spiel starten"),trUtf8("\"%1\" ist ein Gamboy Advance-Spiel. GnuBoy unterstützt die Emulation \
-            des Gamboy Advance aber nicht, weshalb dieses Spiel mit dem VBA ausgeführt werden muss.").arg(game.getName()));
+         QMessageBox::warning(this, trUtf8("Starting game"),trUtf8("\"%1\" is a GameBoy Advance game, but Gnuboy doesn't support Gameboy" \
+            " Advance emulation. Please play this game using the VBA.").arg(game.getName()));
          return;
       }
 
@@ -135,11 +136,11 @@ void CMainForm::btnStartClicked() {
 
       m_EmuProcess->start(game.getOptions().getEmuCommand(), args);
       if (m_EmuProcess->waitForStarted(-1) == false) {
-         QMessageBox::warning(this, trUtf8("Spiel starten"), trUtf8("Das Spiel konnte nicht gestartet werden. Es ist  ein Fehler aufgetreten."));
+         QMessageBox::warning(this, trUtf8("Starting game"), trUtf8("The game cannot be started because an error occured."));
       }
    }
    else {
-      QMessageBox::warning(this, trUtf8("Spiel starten"), trUtf8("Es ist kein Spiel ausgewählt! Bitte wähle das gewünschte Spiel aus der Liste aus!"));
+      QMessageBox::warning(this, trUtf8("Starting game"), trUtf8("No game selected! Please choose the game to start from the game list!"));
    }
 }
 
@@ -148,11 +149,11 @@ void CMainForm::btnAddClicked() {
    // Add a new game
    bool ok;
    QString gametitle;
-   QString filename = QFileDialog::getOpenFileName(this, trUtf8("ROM-Datei auswählen"), QDir::homePath(), trUtf8("GameBoy-ROMs (*.gb *.gbc *.gba)"));
+   QString filename = QFileDialog::getOpenFileName(this, trUtf8("Choose ROM file"), QDir::homePath(), trUtf8("GameBoy ROM files")+" (*.gb *.gbc *.gba)");
 
    if (filename != "") { // Cancel the process when clicking "cancel" ;)
       CGame game(filename);
-      gametitle = QInputDialog::getText(this, trUtf8("Spielname eingeben"), trUtf8("Name des Spiels:"), QLineEdit::Normal, game.getIdentifier(), &ok);
+      gametitle = QInputDialog::getText(this, trUtf8("Enter game title"), trUtf8("Name of the game:"), QLineEdit::Normal, game.getIdentifier(), &ok);
       if (ok && !gametitle.isEmpty()) game.setName(gametitle);
       m_GameList->addItem(game);
 
@@ -171,7 +172,7 @@ void CMainForm::btnDelClicked() {
       m_GameList->removeRow(selectionModel->selectedRows().first().row(), selectionModel->selectedRows().first());
    }
    else {
-      QMessageBox::warning(this, trUtf8("Spiel löschen"), trUtf8("Es ist kein Spiel ausgewählt! Bitte wähle das zu löschende Spiel aus der Liste aus!"));
+      QMessageBox::warning(this, trUtf8("Remove game"), trUtf8("No game has been selected! Please select the game to remove from the list!")); // Es ist kein Spiel ausgewählt! Bitte wähle das zu löschende Spiel aus der Liste aus!
    }
 }
 
@@ -255,7 +256,7 @@ CMainForm::CMainForm(QWidget *parent)
    // Define an application icon
    QIcon icon(":/img/gnuboy.png");
    qApp->setWindowIcon(icon);
-   this->setWindowTitle(trUtf8("KBoy"));
+   this->setWindowTitle("KBoy");
 
    // Load the game list
    CXmlGameListLoader loader(QDir::homePath() + "/.kboy/gamelist.xml");
@@ -281,7 +282,7 @@ CMainForm::~CMainForm() {
       writer.writeGameList(m_GameList);
    }
    catch (...) { // TODO: Correct exception handling...
-      QMessageBox::critical(this, trUtf8("Datei speichern nicht möglich"), trUtf8("Die m_GameList kann nicht gespeichert werden! Schreiben in Datei \"%1\" nicht möglich!").arg(QDir::homePath()));
+   QMessageBox::critical(this, trUtf8("Unable to save file"), trUtf8("The game list cannot be written into file \"%1\"!").arg(QDir::homePath())); // Die m_GameList kann nicht gespeichert werden! Schreiben in Datei \"%1\" nicht möglich!
    }
 
    // remove the options widget from the layout and delete it, but only if it's there at all ;)

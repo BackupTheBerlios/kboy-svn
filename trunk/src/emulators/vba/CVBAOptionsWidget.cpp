@@ -10,7 +10,7 @@ CVBAOptionsWidget::CVBAOptionsWidget(CVBAOptions& emulatorOptions, QWidget *pare
    OptionenVBox = new QVBoxLayout();
    ScaleBox = new QWidget();
    ScaleHBox = new QFormLayout();
-   CheckFullscreen = new QCheckBox(trUtf8("Vollbildmodus"));
+   CheckFullscreen = new QCheckBox(trUtf8("full screen"));
    SpinScale = new QSpinBox();
    CmdLineHBox = new QFormLayout();
    CmdLineBox = new QWidget();
@@ -18,10 +18,10 @@ CVBAOptionsWidget::CVBAOptionsWidget(CVBAOptions& emulatorOptions, QWidget *pare
 
    // create all GUI elements
    // "graphics scale" input
-   ScaleHBox->addRow(trUtf8("Vergrößerung"), SpinScale);
+   ScaleHBox->addRow(trUtf8("graphics scaling:"), SpinScale);
    ScaleBox->setLayout(ScaleHBox);
    // "command line" input
-   CmdLineHBox->addRow(trUtf8("Kommandozeile:"), EditCmdLine);
+   CmdLineHBox->addRow(trUtf8("shell command:"), EditCmdLine);
    CmdLineBox->setLayout(CmdLineHBox);
    // "main" widget
    OptionenVBox->addWidget(CmdLineBox);

@@ -9,20 +9,20 @@ CGnuboyOptionsWidget::CGnuboyOptionsWidget(CGnuboyOptions& emulatorOptions, QWid
    OptionenVBox = new QVBoxLayout();
    ScaleBox = new QWidget();
    ScaleHBox = new QFormLayout();
-   CheckFullscreen = new QCheckBox(trUtf8("Vollbildmodus"));
+   CheckFullscreen = new QCheckBox(trUtf8("full screen"));
    SpinScale = new QSpinBox();
    CmdLineHBox = new QFormLayout();
    CmdLineBox = new QWidget();
    EditCmdLine = new QLineEdit();
-   CheckHardwareAccl = new QCheckBox(trUtf8("Hardwarebeschleunigung"));
-   CheckSound = new QCheckBox(trUtf8("Sound"));
+   CheckHardwareAccl = new QCheckBox(trUtf8("hardware acceleration"));
+   CheckSound = new QCheckBox(trUtf8("sound"));
 
    // create all GUI elements
    // "graphics scale" input
-   ScaleHBox->addRow(trUtf8("Vergrößerung"), SpinScale);
+   ScaleHBox->addRow(trUtf8("graphics scaling:"), SpinScale);
    ScaleBox->setLayout(ScaleHBox);
    // "command line" input
-   CmdLineHBox->addRow(trUtf8("Kommandozeile:"), EditCmdLine);
+   CmdLineHBox->addRow(trUtf8("shell command:"), EditCmdLine);
    CmdLineBox->setLayout(CmdLineHBox);
    // "main" widget
    OptionenVBox->addWidget(CmdLineBox);

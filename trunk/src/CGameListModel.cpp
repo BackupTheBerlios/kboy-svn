@@ -43,18 +43,18 @@ QVariant CGameListModel::data(const QModelIndex& index, int role) const {
          else if (role==Qt::ToolTipRole) {
             // The view wants the tooltip text for the icon column
             if (this->m_GameList[index.row()].romExists() == false) {
-               return trUtf8("ROM-Datei nicht gefunden");
+               return trUtf8("ROM file not found");
             }
             else if (this->m_GameList[index.row()].getType() == CGame::GAMEBOY) {
-               return trUtf8("GameBoy-ROM");
+               return trUtf8("GameBoy ROM");
             }
             else if (this->m_GameList[index.row()].getType() == CGame::GAMEBOYCOLOR) {
-               return trUtf8("Gamboy Color-ROM");
+               return trUtf8("Gameboy Color ROM");
             }
             else  if (this->m_GameList[index.row()].getType() == CGame::GAMEBOYADVANCE) {
-               return trUtf8("Gameboy Advance-ROM");
+               return trUtf8("Gameboy Advance ROM");
             }
-            else return trUtf8("Ungültige ROM-Datei");
+            else return trUtf8("Invalid ROM file");
          }
          break;
 
@@ -85,10 +85,10 @@ QVariant CGameListModel::headerData(int section, Qt::Orientation orientation, in
             return "";
             break;
          case NAME: // Name
-            return trUtf8("Spiel");
+            return trUtf8("game title");
             break;
          case ROMFILE: // ROM file name
-            return trUtf8("ROM-Datei");
+            return trUtf8("ROM file");
             break;
       }
    }

@@ -9,8 +9,11 @@
 - Quellcodestruktur schön machen :)
 - Auf Cmake & Kdevelop umstellen...
 - Unterstützung fuer weitere Emulatoren?
+- Eigene Verwaltung von ROMS (Kopieren in Sammlungsverzeichnis etc.)
 - Direktimport von ROMS aus dem Web (am besten per Compilerflag einschaltbar aus rechtlichen Gründen...?
    --> www.n-roms.de, www.pdroms.de, http://jaymzroo.tripod.com/gb/gbgames.htm
+- Mehrsprachigkeit korrekt...
+
 
 *Gnuboy*
 - Tastenbelegung
@@ -25,10 +28,9 @@
 
 
 
-
-Möglicherweise überflüssige Dateien:
-- kboy.pro
-- qrc_kboy.cpp
+*Buildsystem*
+- Run lrelease (qm file creation) only for release build?
+- Generate extra target for lupdate
 
 
 

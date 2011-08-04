@@ -1,17 +1,23 @@
 #include <QtGui/QApplication>
+#include <QTextCodec>
+#include <QTranslator>
+#include <QDir>
+#include <QLocale>
 
 #include "gui/CMainForm.hpp"
 
 
 int main(int argc, char **argv) {
-	QApplication app(argc, argv);
+   QApplication app(argc, argv);
 
-	QTranslator qtTranslator;
-	qtTranslator.load("kboy_" + QLocale::system().name(), QDir::homePath()+"/.kboy/lang");
-	app.installTranslator(&qtTranslator);
+   QTextCodec::setCodecForTr(QTextCodec::codecForName("utf8"));
 
-	CMainForm dlg;
-	dlg.show();
+   QTranslator qtTranslator;
+   qtTranslator.load("kboy_" + QLocale::system().name(), "/home/thomas/src/kboy/build/");
+   app.installTranslator(&qtTranslator);
 
-	return app.exec();
+   CMainForm dlg;
+   dlg.show();
+
+   return app.exec();
 }
