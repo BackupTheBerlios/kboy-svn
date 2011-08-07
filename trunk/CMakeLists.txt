@@ -28,7 +28,7 @@ include_directories(AFTER src ${CMAKE_BINARY_DIR} )
 
 # TODO:
 # Generate extra target to update ts files (from all  sources)
-# -_> in general, this target must simply call lupdate ^^
+# --> in general, this target must simply call lupdate ^^
 #QT4_CREATE_TRANSLATION (KBOY_QM "${CMAKE_SOURCE_DIR}/src" "kboy_de.ts" "kboy_en.ts")
 
 # This will create qm files for all ts files (one ts file for each translation) using lrelease. This should be done for each build because

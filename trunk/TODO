@@ -6,8 +6,6 @@
 - Quellcode internationalisieren
 - Fenstergröße nachträglich nicht mehr ändern
 - Veröffentlichung (Website...)
-- Quellcodestruktur schön machen :)
-- Auf Cmake & Kdevelop umstellen...
 - Unterstützung fuer weitere Emulatoren?
 - Eigene Verwaltung von ROMS (Kopieren in Sammlungsverzeichnis etc.)
 - Direktimport von ROMS aus dem Web (am besten per Compilerflag einschaltbar aus rechtlichen Gründen...?
