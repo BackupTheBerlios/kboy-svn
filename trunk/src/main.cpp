@@ -24,12 +24,31 @@
 #include <QTranslator>
 #include <QDir>
 #include <QLocale>
+#include <QTextStream>
 
 #include "gui/CMainForm.hpp"
 
 
+#define VERSIONNUMBER "0.2"
+
+
+void printSplash() {
+   QTextStream out(stdout);
+   out << "This is KBoy version " << VERSIONNUMBER << "\n\n";
+   out << "This program is free software; you can redistribute it and/or modify\n" \
+          "it under the terms of the GNU General Public License.\n";
+   out << "This program is distributed in the hope that it will be useful\n" \
+          "and comes without any warranty.\n\n";
+   out << "Copyright 2010-2011 by Thomas Wesenigk\n\n";
+}
+
+
+
 int main(int argc, char **argv) {
+   // TODO: Print out some splash message and author names, program version etc.
    QApplication app(argc, argv);
+
+   printSplash();
 
    QTextCodec::setCodecForTr(QTextCodec::codecForName("utf8"));
 

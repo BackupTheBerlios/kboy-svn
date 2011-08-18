@@ -1,0 +1,6 @@
+KBoy is a graphical use interface for managing GameBoy ROM files and theur corresponding emulator configurations.
+It has no KDE dependencies, but is developed and tested with KDE.
+
+For more information see http://developer.berlios.de/projects/kboy/
+
+For build and install information see INSTALL file.

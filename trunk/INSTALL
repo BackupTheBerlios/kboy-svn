@@ -1,0 +1,40 @@
+
+
+ ***              ***
+ *** How to build ***
+ ***              ***
+
+Kboy uses the cmake buildsystem to generate build files for several platforms.
+In the buildprocess it replaces the good old "configure" script.
+
+To build KBoy, do the following (from the KBoy source directory):
+
+$ mkdir build && cd build
+$ cmake ..
+$ make
+
+All generated files will be placed inside the build directory, so you can have
+several platform builds on the same sources next to each other.
+
+Use
+cmake -G"[env]" ..
+to generate build files for a specific build environment. See the cmake
+documention for further information.
+
+Now, a
+
+$ make install
+
+will spread all files to their positions in the system ;)
+
+
+This program needs Qt4 in version 4.7 or higher. However, it might also compile
+with older versions (but this has not been tested yet). To do that, open the file
+CMakeLists.txt, look for a line like
+
+find_package(Qt4 4.7 REQUIRED)
+
+(near the top) and simply remove the "4.7" version string (or replace it
+with the oldest version number you want to compile against).
+
+If you have problems or any questions, don't hesitate to ask for help.
